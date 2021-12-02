@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- メインコンテンツここから -->
+  <div class="container">
+    <div class="row vh-100 align-items-md-center justify-content-md-center">
+      <div class="card" style="min-width: 500px; max-width: 600px;">
+        <div class="card-body">
+          <div class="card-title">
+            <h2 class="text-center" th:text="${'管理画面'}"></h2>
+          </div>
+          <hr>
+          <!-- タブの一覧ここから -->
+          <!-- コントローラーから渡されたパラメータで表示を切り替える -->
+          <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <a th:class="${ngWord != 'ngWord'} and ${userInfo != 'userInfo'} and ${inquiry != 'inquiry'} ? 'nav-link active' : 'nav-link'" id="nav-item1-tab"
+                 data-bs-toggle="tab" href="#nav-item1" role="tab"
+                 aria-controls="nav-item1" aria-selected="true">
+                 <span>検索関連</span>
+              </a>
+              <a th:class="${ngWord == 'ngWord'} and ${userInfo != 'userInfo'} and ${inquiry != 'inquiry'} ? 'nav-link active' : 'nav-link'" id="nav-item2-tab"
+                 data-bs-toggle="tab" href="#nav-item2" role="tab"
+                 aria-controls="nav-item2" aria-selected="false">NGワード関連
+              </a>
+              <a th:class="${userInfo == 'userInfo'} and ${ngWord != 'ngWord'} and ${inquiry != 'inquiry'} ? 'nav-link active' : 'nav-link'" id="nav-item3-tab"
+                 th:data-currentpage="${0}" data-bs-toggle="tab" href="#nav-item3" role="tab"
+                 aria-controls="nav-item3" aria-selected="false">会員情報
+              </a>
+              <a th:class="${inquiry == 'inquiry'} and ${userInfo != 'userInfo'} and ${ngWord != 'ngWord'} ? 'nav-link active' : 'nav-link'" id="nav-item4-tab"
+                 th:data-currentpage="${0}" data-bs-toggle="tab" href="#nav-item4" role="tab"
+                 aria-controls="nav-item4" aria-selected="false">お問い合わせ
+              </a>
+            </div>
+          </nav>
+          <!-- タブの一覧ここまで -->
+          <div class="tab-content" id="nav-tabContent">
+            <!-- 検索関連ここから -->
+            <div th:replace="~{fragments/Search :: search}"></div>
+            <!-- NGワード関連ここから -->
+            <div th:replace="~{fragments/NgWord :: ngWord}"></div>
+            <!-- 会員情報ここから -->
+            <div th:replace="~{fragments/UserInfo :: userInfo}"></div>
+            <!-- お問い合わせ一覧ここから -->
+            <div th:replace="~{fragments/Inquiry :: inquiry}"></div>
+            <hr>
+            <div class="text-center mb-2">
+              <a class="btn btn-link" th:href="@{/TopPage}" th:text="${'戻る'}"></a>
+            </div>
+          </div>
+          <!-- Postリクエストでログアウトするためformタグを使用 -->
+          <form class="text-center mb-2" th:action="@{/logout}" name="logout" method="post">
+            <a class="btn btn-link" href="javascript:logout.submit()" th:text="${'ログアウトする'}"></a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+<script th:src="@{/js/ajax/toSearchScreen.js}"></script>
+<script th:src="@{/js/ajax/toNgWordScreen.js}"></script>
+<script th:src="@{/js/ajax/toUserInfoScreen.js}"></script>
+<script th:src="@{/js/ajax/toInquiryScreen.js}"></script>
+<script th:src="@{/js/ajax/deleteUserInfo.js}"></script>
+<script th:src="@{/js/ajax/deleteNgWord.js}"></script>
+<script th:src="@{/js/ajax/deleteInquiry.js}"></script>
+<script th:src="@{/js/ajax/registerNgWord.js}"></script>
+<script th:src="@{/js/ajax/searchUsername.js}"></script>
+<script th:src="@{/js/ajax/showUserInfo.js}"></script>
+</html>
+
+
+
+
+
+

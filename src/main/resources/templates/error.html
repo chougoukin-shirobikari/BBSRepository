@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- エラーがあった場合に表示されるView -->
+  <div class="container">
+    <div class="row vh-100 align-items-md-center justify-content-md-center">
+      <div class="jumbotron" style="max-width: 600px;">
+        <div id="heading" class="mb-4 mt-5 mt-md-0 display-1 text-center"th:text="${status}"></div>
+        <p class="lead text-center" th:text="${error}"></p>
+        <div class="text-center mb-4">
+          <div class="text-danger" th:text="${'エラーが発生しました'}"></div>
+        </div>
+        <div class="text-center">
+          <a class="btn btn-primary rounded-pill" th:href="@{/TopPage}" th:text="${'Topページに戻る'}"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

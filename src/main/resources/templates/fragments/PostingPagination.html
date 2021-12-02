@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- ページングの必要がなければ表示しない -->
+  <!-- th:dataでページングに必要な情報をjsファイルに渡す -->
+  <nav th:fragment="postingPagination" th:if="${pageInfo.totalpage > 1}" aria-label="page navigation">
+    <ul class="pagination justify-content-center mt-5">
+      <li th:class="${pageInfo.isFirst == true} ? 'page-item disabled' : 'page-item'">
+        <span>
+          <a class="page-link" id="showPosting"
+             th:data-id="${thread.threadId}" th:data-currentpage="${pageInfo.currentpage - 1}"
+             th:data-bysearch="${bySearch}" th:data-order="${orderBy}"
+             th:href="@{/URL}">←前</a>
+        </span>
+       </li>
+       <li th:each="i : ${#numbers.sequence(pageInfo.currentpage - 2 < 0 ? 0 : pageInfo.currentpage - 2,
+                    pageInfo.currentpage + 2 > pageInfo.totalpage -1 ? pageInfo.totalpage - 1 : pageInfo.currentpage + 2)}"
+           th:class="${i == pageInfo.currentpage} ? 'page-item active' : 'page-item'">
+        <span>
+          <a class="page-link" id="showPosting"
+             th:data-id="${thread.threadId}" th:data-currentpage="${i}"
+             th:data-bysearch="${bySearch}" th:data-order="${orderBy}"
+             th:href="@{/URL}" th:text="${i + 1}"></a>
+        </span>
+      </li>
+      <li th:class="${pageInfo.isLast == true} ? 'page-item disabled' : 'page-item'">
+        <span>
+          <a class="page-link" id="showPosting" 
+             th:data-id="${thread.threadId}" th:data-currentpage="${pageInfo.currentpage + 1}"
+             th:data-bysearch="${bySearch}" th:data-order="${orderBy}"
+             th:href="@{/URL}">次→</a>
+        </span>
+      </li>
+    </ul>
+  </nav>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

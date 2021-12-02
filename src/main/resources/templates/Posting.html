@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <div th:replace="~{fragments/PostingFragment :: postingFragment}"></div>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+<script th:src="@{/js/highlight.js}"></script>
+<script th:src="@{/js/modal_posting.js}"></script>
+<script th:src="@{/js/ajax/showPosting.js}"></script>
+<script th:src="@{/js/ajax/showPostingOrderByCreatedTime.js}"></script>
+<script th:src="@{/js/ajax/showPostingBySearchWithPost.js}"></script>
+<script th:src="@{/js/ajax/deletePosting.js}"></script>
+<script th:src="@{/js/ajax/downloadImage.js}"></script>
+<script th:src="@{/js/ajax/deleteImage.js}"></script>
+</html>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- メインコンテンツここから -->
+  <div th:fragment="threadFragment" class="container">
+    <div class="row h-100 align-items-center justify-content-center">
+      <div class="jumbotron"  style="max-width: 500px;">
+        <h3 class="display-3 text-center mt-3 mb-5" th:text="${genre.genreTitle}"></h3>
+        <!-- スレッドがまだ一つも作成されていない場合メッセージを表示 -->
+        <h4 class="text-center" th:if="${threadSearch != 0 and unwritable != 0 and #lists.size(threadList) == 0}" th:text="${'まだスレッドが作成されていません'}"></h4>
+        <div class="text-center mb-3">
+          <a class="w-50 btn btn-primary rounded-pill" th:href="@{/thread/toThreadForm/__${genre.genreId}__}" th:text="${'新規スレッドの追加'}"></a>
+        </div>
+        <div class="row mb-3">
+          <div class="row" th:if="${threadSearch != 0}">
+            <div class="col-4">
+              <!-- クリックすると画面を更新 -->
+              <!-- th:dataでjsファイルに必要な値を渡す -->
+              <a id="showThread" class="w-100 btn btn-outline-primary rounded-pill btn-sm mx-1"
+                 th:data-id="${genre.genreId}" th:data-currentpage="${0}"
+                 th:href="@{/URL}" th:text="${'更新'}"></a>
+            </div>
+            <div class="col-4">
+              <!-- クリックすると新着順にThreadを表示 -->
+              <!-- th:dataでjsファイルに必要な値を渡す -->
+              <a id="showThreadOrderByCreatedTime" class="w-100 btn btn-outline-primary rounded-pill btn-sm mx-1" 
+                 th:data-id="${genre.genreId}" th:data-currentpage="${0}" th:data-bysearch="${bySearch}" th:data-order="${'orderByCreatedTime'}"
+                 th:href="@{/URL}" th:text="${'新着順'}"></a>
+            </div>
+            <div class="col-4">
+              <!-- クリックする投稿件数が多い順にThreadを表示 -->
+              <!-- th:dataでjsファイルに必要な値を渡す -->
+              <a id="showThreadOrderByNumberOfPosting" class="w-100 btn btn-outline-primary rounded-pill btn-sm mx-1"
+                 th:data-id="${genre.genreId}" th:data-currentpage="${0}" th:data-bysearch="${bySearch}" th:data-order="${'orderByNumberOfPosting'}"
+                 th:href="@{/URL}" th:text="${'投稿件数順'}"></a>
+            </div>  
+          </div>
+        </div>
+        <!-- 検索フォームここから -->
+        <!-- th:dataで必要な値をjsファイルに渡す -->
+        <form class="input-group mb-3" id="showThreadBySearchWithPost"
+              th:data-id="${genre.genreId}" th:data-currentpage="${0}" th:data-bysearch="${'yes'}"
+              th:action="@{/thread/showThreadBySearch/__${genre.genreId}__}" method="Post">
+          <input class="form-control" id="threadTitle" type="text" name="threadTitle" th:value="${threadTitle}" placeholder="スレッドタイトルを入力してください">
+          <input id="searchWords" type="hidden" th:value="${searchWords}">
+          <div class="input-group-append">
+            <button type="submit" class="input-group-text" th:text="${'検索'}"></button>
+          </div> 
+        </form>
+        <!-- 検索フォームここまで -->
+        <div class=" mb-3 text-center">
+          <!-- フォームに空の値が入力されたときはメッセージを表示 -->
+          <div th:if="${isBlank == true}" th:text="${'※スレッドタイトルを入力してください'}" th:class="red"></div>
+        </div>
+        <!-- ADMIN権限を持つユーザーのみ表示 -->
+        <div class="text-center mb-3"  sec:authorize="hasRole('ADMIN')">
+          <a class="w-100 btn btn-link" id="showUnwritableThread" th:data-id="${genre.genreId}" th:data-currentpage="${0}"
+             th:href="@{/URL}" th:text="${'※投稿可能件数を超えたスレッドを表示'}"></a>
+        </div>
+        <div id="wrapper">
+          <!-- 検索条件に一致するThreadが存在しなかった場合はメッセージを表示 -->
+          <h4 class="alert alert-danger text-center" th:if="${threadSearch == 0 and #lists.size(threadList) == 0}" th:text="${'見つかりませんでした'}"></h4>
+          <div id="card" class="card mb-3" th:each="thread, threadStat : ${threadList}"
+               th:data-search="${thread.threadTitle}" th:data-size="${threadStat.size}">
+            <div class="card-body">
+              <p class="card-text text-left">
+                <!-- idにthreadStat.indexを追加することでUniqueな値に -->
+                <span th:id="${'searchedData' + threadStat.index}">
+                  <span id="deleteTitle" th:text="${thread.threadTitle}"></span>
+                </span>
+                <!-- ADMIN権限を持つユーザのみusernameを表示 -->
+                <span style="color: red;" sec:authorize="hasRole('ADMIN')" th:text="${'*' + thread.username}"></span>
+              </p>
+              <hr>
+              <p class="card-text text-left">
+                <span th:text="${thread.createdTime}">作成時刻</span>
+                <span class="badge bg-secondary" th:if="${thread.numberOfPosting > 0}" th:text="${thread.numberOfPosting + '件の投稿'}"></span>
+              </p>
+              <p class="card-text">
+                <span class="badge bg-primary">
+                  <a class="text-white" th:href="@{/posting/showPosting/__${thread.threadId}__}" th:text="${'回覧'}"></a>
+                </span>
+                <!-- ADMIN権限を持つユーザのみ表示 -->
+                <!-- th:dataでjsファイルに必要な値を渡す -->
+                <!-- クリックするとモーダル(削除内容の確認)を表示 -->
+                <span class="card-text" sec:authorize="hasRole('ADMIN')">
+                  <button id="modalButton" class="btn btn-link" type="button" 
+                          th:data-title="${thread.threadTitle}" 
+                          th:data-genreid="${genre.genreId}"
+                          th:data-threadid="${thread.threadId}"
+                          th:data-page="${pageInfo.currentpage}"
+                          th:data-bysearch="${bySearch}"
+                          data-bs-toggle="modal"
+                          data-bs-target="#fadeModal" th:text="${'※削除する'}"></button>
+                </span>
+              </p>
+            </div>
+        </div>
+        <!-- モーダルここから -->
+        <div th:replace="~{fragments/ThreadModal :: threadModal}"></div>
+        <!-- モーダルここまで -->
+        </div>
+        <!-- ページネーションここから -->
+        <nav th:replace="~{fragments/ThreadPagination :: threadPagination}"></nav>
+        <!-- ページネーションここまで -->
+        <div class="text-center mb-5">
+          <a th:href="@{/genre/showGenre}" th:text="${'戻る'}"></a>
+          <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/toManagement}"th:text="${'管理画面へ戻る'}"></a>
+          </span>
+          <div class="mt-3 text-center">
+            <a class="btn btn-link" th:href="@{/TopPage}" th:text="${'Topページへ戻る'}"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- メインコンテンツここまで -->
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

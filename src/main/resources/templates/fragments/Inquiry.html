@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- お問い合わせ一覧ここから -->
+  <!-- コントローラーから渡されたパラメータで表示を切り替える -->
+  <div th:fragment="inquiry" th:class="${inquiry == 'inquiry'} and ${userInfo != 'userInfo'} and ${ngWord != 'ngWord'} ? 'tab-pane fade show active' : 'tab-pane fade'" id="nav-item4" role="tabpanel"
+       aria-labelledby="nav-item4-tab">
+    <div id="card" class="card mb-3 mt-3" th:each="inquiry, inquiryStat : ${inquiryList}">
+      <div class="card-body">
+        <p class="card-text text-left">
+          <span th:text="${inquiryStat.count + (pageInfoAboutInquiry.currentpage * 3) + '.'}"></span>
+          <span th:text="${inquiry.username}"></span>
+          <span th:text="${inquiry.inquiryTime}"></span>
+        </p>
+        <p class="card-text text-left">
+          <span th:text="${inquiry.message}"></span>
+          <!-- クリックすると削除 -->
+          <!-- th:dataからjsファイルへ必要な値を渡す -->
+          <button id="deleteInquiry" class="btn btn-link btn-sm" type="button"
+                  th:data-id="${inquiry.inquiryId}"
+                  th:data-currentpage="${pageInfoAboutInquiry.currentpage}"
+                  th:text="${'※削除する'}"></button>
+        </p>
+      </div>
+    </div>
+    <!-- お問い合わせ一覧ここまで -->
+    <!-- ページネーションここから -->
+    <!-- ページングの必要がなければ表示しない -->
+    <!-- th:dataでページングに必要な情報をjsファイルに渡す -->
+    <nav th:if="${pageInfoAboutInquiry.total != 0 and pageInfoAboutInquiry.totalpage > 1}" aria-label="page navigation">
+      <ul class="pagination justify-content-center">
+        <li th:class="${pageInfoAboutInquiry.isFirst == true} ? 'page-item disabled' : 'page-item'">
+          <a id="nav-item4-tab" class="page-link" th:data-currentpage="${pageInfoAboutInquiry.currentpage - 1}" 
+             th:href="@{/URL}">←前</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(pageInfoAboutInquiry.currentpage - 2 < 0 ? 0 : pageInfoAboutInquiry.currentpage - 2,
+                     pageInfoAboutInquiry.currentpage + 2 > pageInfoAboutInquiry.totalpage -1 ? pageInfoAboutInquiry.totalpage - 1 : pageInfoAboutInquiry.currentpage + 2)}"
+            th:class="${i == pageInfoAboutInquiry.currentpage} ? 'page-item active' : 'page-item'">
+          <a id="nav-item4-tab" class="page-link" th:data-currentpage="${i}" 
+             th:href="@{/URL}" th:text="${i + 1}"></a>
+        </li>
+        <li th:class="${pageInfoAboutInquiry.isLast == true} ? 'page-item disabled' : 'page-item'">
+          <a id="nav-item4-tab" class="page-link" th:data-currentpage="${pageInfoAboutInquiry.currentpage + 1}" 
+             th:href="@{/URL}">次→</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- ページネーションここまで -->
+  </div>
+  <!-- 会員情報ここまで -->
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
+
+
+
+
+
+

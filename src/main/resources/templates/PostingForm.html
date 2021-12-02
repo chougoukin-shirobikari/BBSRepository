@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- メインコンテンツここから -->
+  <div class="container">
+    <div class="row vh-100 align-items-md-center justify-content-md-center">
+      <div class="card" style="max-width: 600px;">
+        <div class="card-body">
+          <h3 class="card-title mb-3 text-center" th:text="${'新規メッセージの投稿'}"></h3>
+          <!-- Postingの投稿件数が制限に達した場合にメッセージを表示 -->
+          <div th:if="${'noMorePosting' == noMorePosting}" class="text-danger text-center mb-2" th:text="${'※これ以上投稿できません'}"></div>
+          <!-- エラーが発生した場合メッセージを表示 -->
+          <div th:if="${Exception == true}" class="text-danger text-center mb-2" th:text="${'※エラーが発生したため投稿できませんでした'}"></div>
+            <!-- 入力フォームここから -->
+            <form th:action="@{/posting/createPosting/__${thread.threadId}__(version = ${thread.threadVersion})}" enctype="multipart/form-data" method="post" th:object="${postingData}">
+              <input type="hidden" name="threadId" th:value="${thread.threadId}">
+              <div class="mb-3">
+                <input class="form-control" type="text" th:field="*{name}" placeholder="名前を入力してください">
+                <div class="mt-3">
+                  <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="red"></div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <textarea class="form-control" name="message" rows="4" cols="40" placeholder="メッセージを入力してください"></textarea>
+                <div class="mt-3">
+                  <div th:if="${#fields.hasErrors('message')}" th:errors="*{message}" th:errorclass="red"></div> 
+                </div>
+              </div>
+              <div class="mb-3">
+                <input class="form-control" type="file" name="file">
+              </div>
+              <!-- クリックすると送信 -->
+              <button class="w-100 btn btn-primary" type="submit" th:text="${'投稿する'}"></button>
+              <div class="mb-3 text-center">
+                <a class="btn btn-link" th:href="@{/posting/showPosting/__${thread.threadId}__}" th:text="${'戻る'}"></a>
+              </div>
+            </form>
+            <!-- 入力フォームここまで -->
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+<!-- 
+
+
+  
+
+ -->
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

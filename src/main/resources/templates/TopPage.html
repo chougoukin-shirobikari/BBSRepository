@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- メインコンテンツここから -->
+  <div class="container">
+    <div class="row vh-100  align-items-md-center justify-content-md-center">
+      <div class="jumbotron" style="max-width: 600px;">
+        <h1 id="heading" class="display-1 text-center mt-5 mt-md-0" th:text="${'BBS'}"></h1>
+        <h2 class="display-4 mb-3 text-center" th:text="${'掲示板へようこそ'}"></h2>
+        <h3 class="mb-3 text-center">
+          <a class="w-50 btn btn-primary rounded-pill" th:href="@{/genre/showGenre}" th:text="${'掲示板を利用する'}"></a>
+        </h3>
+        <h3 class="mb-3 text-center">
+          <a class="w-50 btn btn-outline-primary rounded-pill" th:href="@{/inquiry/toInquiryForm}" th:text="${'お問い合わせ'}"></a>
+        </h3>
+        <h6 class="mb-1 text-center">
+          <a class=" btn btn-link" sec:authorize="hasRole('ADMIN')" th:href="@{/toManagement}" th:text="${'管理画面へ'}"></a>
+        </h6>
+        <!-- Postリクエストでログアウトするためformタグを使用 -->
+        <form class="text-center" th:action="@{/logout}" name="logout" method="post">
+          <a class="btn btn-link" href="javascript:logout.submit()" th:text="${'ログアウトする'}"></a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- メインコンテンツここまで -->
+</body>
+</html>
+<!-- 
+
+<div class="container">
+    <div class="row vh-100 align-items-center justify-content-center">
+      <div class="wrapper" style="max-width: 480px;">
+        <div class="wrapper">
+          <h1 class="mb-3 text-center" th:text="${'掲示板へようこそ'}"></h1>
+          <h3 class="mb-3 text-center">
+            <a class="w-50 btn btn-primary rounded-pill" th:href="@{/genre/showGenre}" th:text="${'掲示板を利用する'}"></a>
+          </h3>
+          <h3 class="mb-3 text-center">
+            <a class="w-50 btn btn-outline-primary rounded-pill" th:href="@{/mail/toMailForm}" th:text="${'お問い合わせ'}"></a>
+          </h3>
+          <h6 class="mb-3 text-center">
+            <a class=" btn btn-link" th:href="@{/toManagement}" th:text="${'管理画面へ'}"></a>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+        
+  
+  
+
+ -->
+  
+      
+
+
+
+
+
+
+
+
+

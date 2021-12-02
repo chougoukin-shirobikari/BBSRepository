@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- NGワード関連一覧ここから -->
+  <!-- コントローラーから渡されたパラメータで表示を切り替える -->
+  <div th:fragment="ngWord" th:class="${ngWord == 'ngWord'} and ${userInfo != 'userInfo'} and ${inquiry != 'inquiry'} ? 'tab-pane fade active show' : 'tab-pane fade'" id="nav-item2" role="tabpanel"
+       aria-labelledby="nav-item2-tab">
+    <div class="row">
+      <div class="col-3 mt-3" th:each="ngWord : ${ngWordList}">
+        <span class="w-100 btn btn-danger rounded-pill" th:text="${ngWord.ngWord}"></span>
+        <div class="text-center">
+          <!-- th:dataからjsファイルへ必要な値を渡す -->
+          <a id="deleteNgWord" class="btn btn-link"
+             th:data-id="${ngWord.ngWordId}"
+             th:href="@{/URL}"
+             th:text="${'※削除する'}"></a>
+        </div>
+      </div>
+    </div>
+    <!-- NGワードの入力フォーム -->
+    <form id="registerNgWord"  th:action="@{/registerNgWord}" method="post">
+      <div class="text-center">
+        <input id="ngWord" type="text" name="ngWord">
+        <div class="mt-3">
+          <!-- 入力にエラーがあった場合メッセージを表示 -->
+          <div th:if="${ngWordError == 'ngWordError'}" th:text="${'※入力エラーです'}" th:class="red"></div>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <button class="btn btn-secondary btn-sm" type="submit" th:text="${'NGワードを追加'}"></button>
+      </div>
+    </form>
+  </div>
+  <!-- NGワード関連一覧ここまで -->          
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
+
+
+
+
+
+

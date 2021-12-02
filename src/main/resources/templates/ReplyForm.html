@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- メインコンテンツここから -->
+  <div class="container">
+    <div class="row vh-100 align-items-md-center justify-content-md-center">
+      <div class="card" style="max-width: 600px;">
+        <div class="card-body">
+          <h3 class="card-title mb-3 text-center" th:text="${'コメントの作成'}"></h3>
+          <!-- コメントの投稿件数が制限に達した場合メッセージを表示 -->
+          <div th:if="${'noMoreReply' == noMoreReply}" class="text-danger text-center mb-2" th:text="${'※これ以上コメントできません'}"></div>
+          <!-- エラーが発生した場合にメッセージを表示 -->
+          <div th:if="${OptimisticLockingFailure == true}" class="text-danger text-center mb-2" th:text="${'※エラーが発生したためコメントできませんでした'}"></div>
+          <!-- 入力フォームここから -->
+          <form th:action="@{/reply/create/__${posting.postingId}__(version = ${posting.postingVersion})}" method="post" th:object="${replyData}">
+            <input type="hidden" name="postingId" th:value="${posting.postingId}">
+            <div class="mb-3">
+              <input class="form-control" type="text" th:field="*{name}" placeholder="名前を入力してください">
+              <div class="mt-3">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="red"></div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control" name="replyMessage" rows="4" cols="40" placeholder="コメントを入力してください"></textarea>
+              <div class="mt-3">
+                <div th:if="${#fields.hasErrors('replyMessage')}" th:errors="*{replyMessage}" th:errorclass="red"></div>
+              </div>
+            </div>
+            <!-- クリックすると送信 -->
+            <button class="w-100 btn btn-primary" type="submit" th:text="${'コメントする'}"></button>
+          </form>
+          <!-- 入力フォームここまで -->
+          <div class="mb-3 text-center">
+            <a class="btn btn-link" th:href="@{/posting/showPosting/__${posting.threadId}__}" th:text="${'戻る'}"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- メインコンテンツここまで -->
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- メインコンテンツここから -->
+  <div th:fragment="postingFragment" class="container">
+    <div class="row mt-5 align-items-center justify-content-center">
+      <div class="jumbotron" style="max-width: 500px;">
+        <h3 class="display-3 text-center mt-3 mb-5" th:text="${thread.threadTitle}"></h3>
+        <!-- まだ投稿が無い場合メッセージを表示 -->
+        <h4 class="text-center" th:if="${postingSearch != 0 and #lists.size(postingList) == 0}" th:text="${'まだ書き込みがありません'}"></h4>
+        <div th:if="${thread.numberOfPosting <= maxNumberOfPosting - 1}" class="text-center mb-3">
+          <!-- クリックするとフォーム画面へ -->
+          <!-- Postingの投稿件数が制限に達していた場合表示しない -->
+          <a class="w-50 btn btn-primary rounded-pill" th:href="@{/posting/form/__${thread.threadId}__}" th:text="${'メッセージを投稿する'}"></a>
+        </div>
+        <!-- TODO -->
+        <!-- Postingの投稿件数が制限に達した場合メッセージを表示 -->
+        <div th:if="${thread.numberOfPosting > maxNumberOfPosting - 1}" class="text-center mb-3">
+          <span class="w-50 btn btn-danger rounded-pill" th:text="${'これ以上投稿できません'}"></span>
+        </div>
+        <div class="row mb-3">
+          <div class="row">
+            <div class="col-4">
+              <!-- クリックすると画面を更新 -->
+              <!-- th:dataでjsファイルに必要な値を渡す -->
+              <a class="w-100 btn btn-outline-primary rounded-pill btn-sm mx-1" id="showPosting"
+                 th:data-id="${thread.threadId}" th:data-currentpage="${0}"
+                 th:href="@{/URL}" th:text="${'更新'}"></a>
+            </div>
+            <div class="col-4">
+              <!-- クリックすると新着順に表示 -->
+              <!-- th:dataで必要な値をjsファイルに渡す -->
+              <a class="w-100 btn btn-outline-primary rounded-pill btn-sm mx-1" id="showPostingOrderByCreatedTime"
+                 th:data-id="${thread.threadId}" th:data-currentpage="${0}" th:data-bysearch="${bySearch}" th:data-order="${'orderByCreatedTime'}"
+                 th:href="@{/URL}" th:text="${'新着順'}"></a>
+            </div>
+            <div class="offset-4"></div>
+          </div>
+        </div>
+        <!-- 検索フォームここから -->
+        <!-- th:dataでjsファイルに必要な情報を渡す -->
+        <form class="input-group mb-3" id="showPostingBySearchWithPost"
+              th:data-id="${thread.threadId}" th:data-currentpage="${0}" th:data-bysearch="${'yes'}"
+              th:action="@{/posting/showPostingBySearch/__${thread.threadId}__}" method="post">
+          <input class="form-control" id="searchText" type="text" name="message" th:value="${message}" placeholder="キーワードを入力してください">
+          <input id="searchWords" type="hidden" th:value="${searchWords}">
+          <div class="input-group-append">
+            <button type="submit" class="input-group-text" th:text="${'検索'}"></button>
+          </div> 
+        </form>
+        <!-- 検索フォームここまで -->
+        <div class=" mb-3 text-center">
+          <!-- 入力値が空の場合メッセージを表示 -->
+          <div th:if="${isBlank == true}" th:text="${'※キーワードを入力してください'}" th:class="red"></div>
+        </div>
+        <!-- 条件に一致するPostingが存在しなかった場合メッセージを表示 -->
+        <h4 class="alert alert-danger text-center" th:if="${postingSearch == 0 and #lists.size(postingList) == 0 and isBlank != true}" th:text="${'見つかりませんでした'}"></h4>
+        <div id="card" class="card mb-3" th:each="posting, postingStat : ${postingList}" th:class="${posting.postingNo == postingNoBySearch} ? 'card mb-3 border-danger' : 'card mb-3'"
+             th:data-search="${posting.message}"
+             th:data-size="${postingStat.size}">
+          <div class="card-body">
+            <p class="card-text text-left">
+              <span th:text="${posting.postingNo + '.'}"></span>
+              <span th:text="${posting.name}"></span>
+              <span th:if="${posting.name != '削除済み'}" style="color: red;" sec:authorize="hasRole('ADMIN')" th:text="${'*' + posting.username}"></span>
+              <span th:text="${posting.writingTime}"></span>
+              <span class="badge bg-secondary" th:if="${posting.numberOfReply > 0 and posting.name != '削除済み'}">
+                <a class="text-white" th:href="@{/reply/showReply/__${posting.postingId}__}"  th:text="${'コメント' + posting.numberOfReply + '件'}"></a>
+              </span>
+            </p>
+            <!-- idにpostingStat.indexを追加しUniqueな値に -->
+            <p th:id="${'searchedData' + postingStat.index}" class="card-text text-left">
+              <span th:text="${posting.message}"></span>
+            </p>
+            <p th:if="${posting.hasImage != null}" class="card-text test-left">
+              <!-- クリックすると画像をモーダルで表示 -->
+              <!-- th:dataで必要な情報をjsファイルに渡す -->
+              <button class="btn btn-outline-primary btn-sm" type="button" id="imageModalButton"
+                      th:data-id="${posting.postingId}"
+                      th:data-page="${pageInfo.currentpage}"
+                      th:data-bysearch="${bySearch}"
+                      data-bs-target= "#imageModal" data-bs-toggle="modal" th:text="${'画像を表示する'}">
+              </button>
+            </p>
+            <span th:if="${posting.name != '削除済み'}">
+              <!-- TODO -->
+              <a th:if="${posting.numberOfReply <= maxNumberOfReply - 1}" class="badge bg-primary text-white" th:href="@{/reply/toReplyForm/__${posting.postingId}__}" th:text="${'コメントする'}"></a>
+              <span th:if="${posting.numberOfReply > maxNumberOfReply - 1}" class="badge bg-danger text-white" th:text="${'これ以上コメントできません'}"></span>
+            </span>
+            <span th:if="${posting.name != '削除済み'}">
+              <!-- ADMIN権限を持つユーザーのみ表示 -->
+              <!-- クリックするとモーダル(削除内容の確認)を表示 -->
+              <!-- th:dataでjsファイルに必要な値を渡す -->
+              <button sec:authorize="hasRole('ADMIN')" id="modalButton" class="btn btn-link" type="button"
+                      th:data-postingid="${posting.postingId}"
+                      th:data-threadid="${thread.threadId}"
+                      th:data-no="${posting.postingNo + '.'}"
+                      th:data-name="${posting.name}"
+                      th:data-time="${posting.writingTime}"
+                      th:data-message="${posting.message}"
+                      th:data-page="${pageInfo.currentpage}"
+                      th:data-bysearch="${bySearch}"
+                      data-bs-target= "#fadeModal" data-bs-toggle="modal" th:text="${'※投稿を削除する'}"></button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- モーダルここから -->
+      <div th:replace="~{fragments/PostingModal :: postingModal}"></div>
+      <div th:replace="~{fragments/ImageModal :: imageModal}"></div>
+      <!-- モーダルここまで -->
+      <!-- ページネーションここから -->
+      <nav th:replace="~{fragments/PostingPagination :: postingPagination}"></nav>
+      <!-- ページネーションここまで -->
+      <div class="mt-4 mb-5 text-center">
+        <a th:href="@{/thread/showThread/__${thread.genreId}__}" th:text="${'戻る'}"></a>
+        <span sec:authorize="hasRole('ADMIN')">
+          <a th:href="@{/toManagement}"th:text="${'管理画面へ戻る'}"></a>
+        </span>
+        <div class="mt-3 text-center">
+          <a class="btn btn-link" th:href="@{/TopPage}" th:text="${'Topページへ戻る'}"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- メインコンテンツここまで -->
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

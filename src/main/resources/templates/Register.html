@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<title>Bulletin Board</title>
+</head>
+<body>
+  <!-- メインコンテンツここから -->
+  <div class="container">
+    <div class="row vh-100 align-items-md-center justify-content-md-center">
+      <div class="card" style="max-width: 600px;">
+        <div class="card-body">
+          <h3 class="card-title mv-3 text-center" th:text="${'新規会員登録'}"></h3>
+          <!-- 入力フォームここから -->
+          <form th:action="@{/register}" method="post" th:object="${userInfoData}" novalidate>
+            <div class="form-group mb-3">
+              <div class="row">
+                <div class="col-4">
+                  <p class="text-center" th:text="${'ユーザー名'}"></p>
+                </div>
+                <div class="col-8">
+                  <input class="form-control" type="text" th:field="*{username}" placeholder="※必須">
+                  <div class="mt-3">
+                    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:errorclass="red"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="row">
+                <div class="col-4">
+                  <p class="text-center" th:text="${'パスワード'}"></p>
+                </div>
+                <div class="col-8">
+                  <input class="form-control" type="text" th:field="*{password}" placeholder="※必須">
+                  <div class="mt-3">
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="red"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group from-check mb-3">
+              <div class="row">
+                <div class="col-4">
+                  <p class="text-center" th:text="${'性別'}"></p>
+                </div>
+                <div class="col-8">
+                  <div th:each="gender :${T(com.example.bulletinboard.util.Type).GENDERS}">
+                    <input class="form-check-input" type="radio" th:field="*{gender}" th:value="${gender.key}" th:text="${gender.value}" placeholder="※必須">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- ADMIN権限を持つユーザーが登録されていない場合表示 -->
+            <div th:if="${adminExists == false}" class="form-group mb-3">
+              <div class="row">
+                <div class="col-4">
+                  <p class="text-center" th:text="${'権限'}">
+                </div>
+                <div class="col-8">
+                  <input class="form-check-input" type="checkbox" th:field="*{admin}" th:text="${'Admin(管理者)として登録する'}"></input>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <!-- クリックすると送信 -->
+              <button type="submit" class="w-100 btn btn-primary" th:text="登録する"></button>
+            </div>
+            <div class="mb-3 text-center">
+              <a class="btn btn-link" th:href="@{/login}" th:text="${'戻る'}"></a>
+            </div>
+          </form>
+          <!-- 入力フォームここまで -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- メインコンテンツここまで -->
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
