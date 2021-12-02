@@ -45,6 +45,5 @@
 ![aws](https://user-images.githubusercontent.com/91199128/144392129-621d577c-9e0d-4d3c-8239-c16d0ba41050.png)
 
 ## ER図
-![er2](https://user-images.githubusercontent.com/91199128/144392654-8eb2a370-5b47-4375-8f3d-4caa7949a30d.png)
-
+![er3](https://user-images.githubusercontent.com/91199128/144401872-1752f293-33a1-42b8-b082-20419ccab228.png)
 
