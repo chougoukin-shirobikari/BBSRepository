@@ -37,6 +37,10 @@
     * RDS
     * S3
 
+## テスト
+* 単体テスト
+* 結合テスト
+
 ## インフラ構成図
 ![aws](https://user-images.githubusercontent.com/91199128/144392129-621d577c-9e0d-4d3c-8239-c16d0ba41050.png)
 
