@@ -1,4 +1,5 @@
-# BBS(多機能掲示板)  
+# BBS(多機能掲示板) 
+
 ## 機能一覧
 ### ユーザー登録・ログイン機能
 ### 投稿機能
@@ -18,3 +19,20 @@
     * ユーザー名で検索可
     * 長期間投稿のないユーザーの表示
 * お問い合わせの一覧表示
+
+## 使用技術
+* java11
+* JUnit5
+* springboot2.5
+* javascript
+    * JQuery
+* MySQL8.0
+* Nginx
+* Tomcat9.0
+* AWS
+    * ELB
+    * Route53
+    * VPC
+    * EC2
+    * RDS
+    * S3
