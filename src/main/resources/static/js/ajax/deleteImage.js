@@ -6,15 +6,7 @@ Imageの削除に関するjsファイル
 
 $(document).on('click', '#deleteImage', function(event){
 	event.preventDefault();
-	let postingId = $('#imageModalButton').data('id');
-	let bySearch = $('#deleteImage').data('bysearch');
-	let Url;
-	if(bySearch === 'yes'){
-	  let message = $('#searchText').val();
-	  Url = "/posting/deleteSearchedPostingImage/" + postingId + "?message=" + message;
-	}else{
-	  Url = "/posting/deletePostingImage/" + postingId;
-	}
+	let Url = $('#deleteImage').attr('href');
 	
 	$.ajax({
 		type: "GET",

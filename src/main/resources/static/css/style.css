@@ -41,6 +41,8 @@ input:checked + .tab_class + .content_class {
 	  font-size: 100px;
 	}
 }
+
+/* ハイライト */
 .highlight {
 	padding: 0px;
 	font-weight: bold;
@@ -48,6 +50,7 @@ input:checked + .tab_class + .content_class {
 	color: #333;
 	background-color: #ecde00;
 }
+
 /* スピナー */
 #overlay {
 	position: fixed;
