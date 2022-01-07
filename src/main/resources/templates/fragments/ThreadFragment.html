@@ -13,12 +13,14 @@
   <div th:fragment="threadFragment" class="container">
     <div class="row h-100 align-items-center justify-content-center">
       <div class="jumbotron"  style="max-width: 500px;">
-        <h3 class="display-3 text-center mt-3 mb-5" th:text="${genre.genreTitle}"></h3>
+        <h3 class="display-3 text-center text-nowrap mt-3 mb-5" th:text="${genre.genreTitle}"></h3>
         <!-- スレッドがまだ一つも作成されていない場合メッセージを表示 -->
         <h4 class="text-center" th:if="${threadSearch != 0 and unwritable != 0 and #lists.size(threadList) == 0}" th:text="${'まだスレッドが作成されていません'}"></h4>
         <div class="text-center mb-3">
-          <a class="w-50 btn btn-primary rounded-pill" th:href="@{/thread/toThreadForm/__${genre.genreId}__}" th:text="${'新規スレッドの追加'}"></a>
+          <a class="w-50 btn btn-primary rounded-pill text-nowrap" th:href="@{/thread/toThreadForm/__${genre.genreId}__}" th:text="${'新規スレッドの追加'}"></a>
         </div>
+        <!-- スレッドの作成が成功した場合メッセージを表示 -->
+        <div class="alert alert-info text-center" th:if="${'isSuccessful' == isSuccessful}" th:text="${'新規スレッドが追加されました'}"></div>
         <div class="row mb-3">
           <div class="row" th:if="${threadSearch != 0}">
             <div class="col-4">

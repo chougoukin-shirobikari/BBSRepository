@@ -40,6 +40,7 @@ import com.example.bulletinboard.repository.UserInfoRepository;
 import com.example.bulletinboard.service.PaginationService;
 import com.example.bulletinboard.service.ValidationService;
 import com.example.bulletinboard.util.Limit;
+import com.example.bulletinboard.validator.Validator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -60,6 +61,7 @@ public class ManagementController {
 	private final ValidationService validationService;
 	private final UserInfoRepository userInfoRepository;
 	private final InquiryRepository inquiryRepository;
+	private final Validator validator;
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -378,7 +380,7 @@ public class ManagementController {
 			                     ModelAndView mv) {
 		NgWord ng_word = new NgWord();
 		//NgWordのバリデーション
-		if(ngWord == null || ngWord.isEmpty() || !validationService.isValid(ngWord)) {
+		if(ngWord == null || ngWord.isEmpty() || !validationService.isValid(ngWord) || !validator.sizeIsValid(ngWord, 10)) {
 			//エラーあり
 			//NgWordListを取得しViewへ渡す
 			List<NgWord> ngWordList = ngWordRepository.findAll();

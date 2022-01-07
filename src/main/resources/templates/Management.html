@@ -25,11 +25,11 @@
               <a th:class="${ngWord != 'ngWord'} and ${userInfo != 'userInfo'} and ${inquiry != 'inquiry'} ? 'nav-link active' : 'nav-link'" id="nav-item1-tab"
                  data-bs-toggle="tab" href="#nav-item1" role="tab"
                  aria-controls="nav-item1" aria-selected="true">
-                 <span>検索関連</span>
+                 <span>検索</span>
               </a>
               <a th:class="${ngWord == 'ngWord'} and ${userInfo != 'userInfo'} and ${inquiry != 'inquiry'} ? 'nav-link active' : 'nav-link'" id="nav-item2-tab"
                  data-bs-toggle="tab" href="#nav-item2" role="tab"
-                 aria-controls="nav-item2" aria-selected="false">NGワード関連
+                 aria-controls="nav-item2" aria-selected="false">NGワード
               </a>
               <a th:class="${userInfo == 'userInfo'} and ${ngWord != 'ngWord'} and ${inquiry != 'inquiry'} ? 'nav-link active' : 'nav-link'" id="nav-item3-tab"
                  th:data-currentpage="${0}" data-bs-toggle="tab" href="#nav-item3" role="tab"

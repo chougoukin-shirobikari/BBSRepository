@@ -378,6 +378,8 @@ public class ThreadController {
   			threadRepository.saveAndFlush(thread);
   			//genre(エンティティオブジェクト)を取得しリダイレクト先へ渡す
   			redirectAttributes.addFlashAttribute("genre", genre);
+  			//リダイレクト先でメッセージを表示する為にパラメータを渡す
+			redirectAttributes.addFlashAttribute("isSuccessful", "isSuccessful");
   			return "redirect:/thread/showThread/" + genre.getGenreId();
 			
 		}else if(!isUnique) {

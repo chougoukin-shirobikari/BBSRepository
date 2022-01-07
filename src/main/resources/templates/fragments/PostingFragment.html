@@ -19,9 +19,10 @@
         <div th:if="${thread.numberOfPosting <= maxNumberOfPosting - 1}" class="text-center mb-3">
           <!-- クリックするとフォーム画面へ -->
           <!-- Postingの投稿件数が制限に達していた場合表示しない -->
-          <a class="w-50 btn btn-primary rounded-pill" th:href="@{/posting/form/__${thread.threadId}__}" th:text="${'メッセージを投稿する'}"></a>
+          <a class="w-50 btn btn-primary rounded-pill text-nowrap" th:href="@{/posting/form/__${thread.threadId}__}" th:text="${'投稿する'}"></a>
         </div>
-        <!-- TODO -->
+        <!-- 投稿が完了した場合メッセージを表示 -->
+        <div class="alert alert-info text-center" th:if="${'isSuccessful' == isSuccessful}" th:text="${'投稿が完了しました'}"></div>
         <!-- Postingの投稿件数が制限に達した場合メッセージを表示 -->
         <div th:if="${thread.numberOfPosting > maxNumberOfPosting - 1}" class="text-center mb-3">
           <span class="w-50 btn btn-danger rounded-pill" th:text="${'これ以上投稿できません'}"></span>

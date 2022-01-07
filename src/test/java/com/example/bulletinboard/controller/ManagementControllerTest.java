@@ -85,7 +85,7 @@ class ManagementControllerTest {
 		
 		mockMvc
 		.perform(get("/toNgWord").flashAttr("ngWordError", "ngWordError"))
-		.andExpect(content().string(containsString("入力エラーです")));
+		.andExpect(content().string(containsString("エラー: 未入力 or 文字数が多すぎます")));
 	}
 	
 	@Test

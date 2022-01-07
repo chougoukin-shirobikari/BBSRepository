@@ -13,8 +13,8 @@
   <div th:fragment="ngWord" th:class="${ngWord == 'ngWord'} and ${userInfo != 'userInfo'} and ${inquiry != 'inquiry'} ? 'tab-pane fade active show' : 'tab-pane fade'" id="nav-item2" role="tabpanel"
        aria-labelledby="nav-item2-tab">
     <div class="row">
-      <div class="col-3 mt-3" th:each="ngWord : ${ngWordList}">
-        <span class="w-100 btn btn-danger rounded-pill" th:text="${ngWord.ngWord}"></span>
+      <div class="col-6 mt-3" th:each="ngWord : ${ngWordList}">
+        <span class="w-100 btn btn-danger rounded-pill text-nowrap" th:text="${ngWord.ngWord}"></span>
         <div class="text-center">
           <!-- th:dataからjsファイルへ必要な値を渡す -->
           <a id="deleteNgWord" class="btn btn-link"
@@ -30,7 +30,7 @@
         <input id="ngWord" type="text" name="ngWord">
         <div class="mt-3">
           <!-- 入力にエラーがあった場合メッセージを表示 -->
-          <div th:if="${ngWordError == 'ngWordError'}" th:text="${'※入力エラーです'}" th:class="red"></div>
+          <div th:if="${ngWordError == 'ngWordError'}" th:text="${'エラー: 未入力 or 文字数が多すぎます'}" th:class="red"></div>
         </div>
       </div>
       <div class="text-center mt-3">

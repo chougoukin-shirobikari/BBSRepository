@@ -355,6 +355,8 @@ public class PostingController {
 				}
 				//thread(エンティティオブジェクト)を取得しリダイレクト先へ渡す
 	  			redirectAttributes.addFlashAttribute("thread", thread);
+	  			//リダイレクト先でメッセージを表示する為にパラメータを渡す
+				redirectAttributes.addFlashAttribute("isSuccessful", "isSuccessful");
 	  			return "redirect:/posting/showPosting/" + thread.getThreadId();
 				
 			}catch(OptimisticLockingFailureException | IOException | MaxUploadSizeExceededException | AmazonServiceException e) {

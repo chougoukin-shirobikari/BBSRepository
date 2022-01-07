@@ -18,7 +18,7 @@
           <div class="col-6 col-md-4" th:each="genre : ${genreList}">
             <div class="mb-3">
               <a th:href="@{/thread/showThread/__${genre.genreId}__(page = 0)}">
-                <span class="w-100 btn btn-primary rounded-pill" th:text="${genre.genreTitle}"></span>
+                <span class="w-100 btn btn-primary rounded-pill text-nowrap" th:text="${genre.genreTitle}"></span>
               </a>
               <div class="text-center" sec:authorize="hasRole('ADMIN')">
                 <!-- th:dataでモーダルに必要なパラメータを渡す -->
