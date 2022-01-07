@@ -119,7 +119,7 @@ public class ValidationService {
 			result.addError(fieldError);
 			return;
 		}else if(!validator.notInvalidUsername(username)) {
-			FieldError fieldError = new FieldError(result.getObjectName(), field, "エラー:ユーザ名が一致しません");
+			FieldError fieldError = new FieldError(result.getObjectName(), field, "ログインしたユーザー名を入力してください");
 			result.addError(fieldError);
 			return;
 		}else {
