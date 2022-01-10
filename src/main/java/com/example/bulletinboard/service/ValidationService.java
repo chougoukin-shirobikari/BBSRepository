@@ -80,9 +80,15 @@ public class ValidationService {
 		}else if(!validator.sizeIsValid(username, min, max)) {
 			FieldError fieldError = new FieldError(result.getObjectName(), field, min + "文字以上" + max + "文字以内で入力してください");
 			result.addError(fieldError);
+			return;
 		}else if(!validator.isHalf_WidthAlphanumeric(username)) {
 			FieldError fieldError = new FieldError(result.getObjectName(), field, "半角英数字で入力してください");
 			result.addError(fieldError);
+			return;
+		}else if(!validator.usernameIsUnique(username)){
+			FieldError fieldError = new FieldError(result.getObjectName(), field, "入力されたユーザー名は既に登録されています");
+			result.addError(fieldError);
+			return;
 		}else {
 			return;
 		}
@@ -97,9 +103,11 @@ public class ValidationService {
 		}else if(!validator.sizeIsValid(password, min, max)) {
 			FieldError fieldError = new FieldError(result.getObjectName(), field, min + "文字以上で入力してください");
 			result.addError(fieldError);
+			return;
 		}else if(!validator.isHalf_WidthAlphanumeric(password)) {
 			FieldError fieldError = new FieldError(result.getObjectName(), field, "半角英数字で入力してください");
 			result.addError(fieldError);
+			return;
 		}else {
 			return;
 		}

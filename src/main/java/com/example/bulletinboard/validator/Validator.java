@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.bulletinboard.entity.NgWord;
 import com.example.bulletinboard.repository.NgWordRepository;
+import com.example.bulletinboard.repository.UserInfoRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class Validator {
 	
 	private final NgWordRepository ngWordRepository;
+	private final UserInfoRepository userInfoRepository;
 	
 	//入力された文字列が制限をオーバーしていないかチェックする
 	public boolean sizeIsValid(String str, int max) {
@@ -88,22 +90,17 @@ public class Validator {
 		}
 	}
 	
+	//usernameが既に登録されていないかチェック
+	public boolean usernameIsUnique(String username) {
+		int num = userInfoRepository.countUsername(username);
+		if(num == 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

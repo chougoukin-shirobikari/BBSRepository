@@ -56,6 +56,17 @@ class UserInfoDataTest {
 	}
 	
 	@Test
+	void 既に登録されたusernameが入力されたときエラーメッセージが表示されることを期待します() throws Exception {
+		//Arrange
+		userInfoData.setUsername("testuser");
+		//Act
+		validationService.usernameIsValid("testuser", "username", 2, 20, result);
+		//Assert
+		assertThat(result.getFieldError().getField(), is("username"));
+		assertThat(result.getFieldError().getDefaultMessage(), is("入力されたユーザー名は既に登録されています"));
+	}
+	
+	@Test
 	void passwordに空の値が入力されたときエラーメッセージが表示されることを期待します() throws Exception {
 		//Arrange
 		userInfoData.setPassword("");
