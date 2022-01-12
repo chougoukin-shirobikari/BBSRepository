@@ -1,5 +1,6 @@
 package com.example.bulletinboard.controller;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -129,7 +130,7 @@ public class ReplyController {
   	  			redirectAttributes.addFlashAttribute("posting", posting);
   	  			return "redirect:/reply/showReply/" + posting.getPostingId();
   				
-  			}catch(OptimisticLockingFailureException e) {
+  			}catch(OptimisticLockingFailureException | ParseException e) {
   				//Replyの登録中にエラーがあった場合
   				//エラーメッセージをリダイレクト先で表示
   				redirectAttributes.addFlashAttribute("OptimisticLockingFailure", true);

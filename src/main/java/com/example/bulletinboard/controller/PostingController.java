@@ -1,6 +1,7 @@
 package com.example.bulletinboard.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -359,7 +360,7 @@ public class PostingController {
 				redirectAttributes.addFlashAttribute("isSuccessful", "isSuccessful");
 	  			return "redirect:/posting/showPosting/" + thread.getThreadId();
 				
-			}catch(OptimisticLockingFailureException | IOException | MaxUploadSizeExceededException | AmazonServiceException e) {
+			}catch(OptimisticLockingFailureException | IOException | MaxUploadSizeExceededException | AmazonServiceException | ParseException e) {
 				//Postingの登録中にエラーがあった場合
 				e.printStackTrace();
 				//エラーメッセージをリダイレクト先で表示

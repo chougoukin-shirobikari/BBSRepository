@@ -12,18 +12,20 @@
   <!-- コントローラーから渡されたパラメータで表示を切り替える -->
   <div th:fragment="ngWord" th:class="${ngWord == 'ngWord'} and ${userInfo != 'userInfo'} and ${inquiry != 'inquiry'} ? 'tab-pane fade active show' : 'tab-pane fade'" id="nav-item2" role="tabpanel"
        aria-labelledby="nav-item2-tab">
-    <div class="row">
-      <div class="col-6 mt-3" th:each="ngWord : ${ngWordList}">
-        <span class="w-100 btn btn-danger rounded-pill text-nowrap" th:text="${ngWord.ngWord}"></span>
-        <div class="text-center">
-          <!-- th:dataからjsファイルへ必要な値を渡す -->
-          <a id="deleteNgWord" class="btn btn-link"
-             th:data-id="${ngWord.ngWordId}"
-             th:href="@{/URL}"
-             th:text="${'※削除する'}"></a>
+    <ul class="list-group mt-3 mb-3">
+      <li class="list-group-item" th:each="ngWord : ${ngWordList}">
+        <div class="row">
+          <span class="col-9 text-danger fw-bold" th:text="${ngWord.ngWord}"></span>
+          <span class="col-3 text-center">
+            <!-- th:dataからjsファイルへ必要な値を渡す -->
+            <a id="deleteNgWord" class="btn btn-link"
+               th:data-id="${ngWord.ngWordId}"
+               th:href="@{/URL}"
+               th:text="${'※削除する'}"></a>
+          </span>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
     <!-- NGワードの入力フォーム -->
     <form id="registerNgWord"  th:action="@{/registerNgWord}" method="post">
       <div class="text-center">

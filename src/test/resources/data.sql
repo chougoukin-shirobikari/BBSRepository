@@ -21,6 +21,7 @@ INSERT INTO ng_word VALUES(1, 'ngword');
 
 INSERT INTO user_info VALUES(1, 'testuser', 'password', '男性', 'USER', '2021-07-22');
 INSERT INTO user_info VALUES(2, 'ghostuser', 'password', '男性', 'USER', '2021-07-22');
+INSERT INTO user_info VALUES(3, 'admin', 'password', '男性', 'ADMIN', '2021-07-22');
 
 INSERT INTO inquiry VALUES(1, 'testuser', 'message', '2020-01-01', 1)
 

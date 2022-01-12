@@ -1,6 +1,8 @@
 package com.example.bulletinboard.service;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +19,15 @@ import com.amazonaws.AmazonServiceException;
 import com.example.bulletinboard.entity.Posting;
 import com.example.bulletinboard.entity.Reply;
 import com.example.bulletinboard.entity.Thread;
+import com.example.bulletinboard.entity.UserInfo;
 import com.example.bulletinboard.form.PostingData;
 import com.example.bulletinboard.form.ReplyData;
 import com.example.bulletinboard.model.PageInfo;
 import com.example.bulletinboard.repository.PostingRepository;
 import com.example.bulletinboard.repository.ReplyRepository;
 import com.example.bulletinboard.repository.ThreadRepository;
+import com.example.bulletinboard.repository.UserInfoRepository;
+import com.example.bulletinboard.util.Utils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +42,7 @@ public class BulletinboardService {
 	private final PostingRepository postingRepository;
 	private final ThreadRepository threadRepository;
 	private final ReplyRepository replyRepository;
+	private final UserInfoRepository userInfoRepository;
 	
 	//postingを表示する際に必要なパラメータをModelにセットする(bySearch, orderByの値によって条件分岐)
 	public ModelAndView createViewInfoAboutPosting(ModelAndView mv, Integer page, int total, int limit, String bySearch, String orderBy) {
@@ -143,7 +149,7 @@ public class BulletinboardService {
 	
 	//postingをデータベースに登録する
 	@Transactional
-	public void savePosting(long threadVersion, Thread thread, PostingData postingData, int size, MultipartFile file) throws IOException, AmazonServiceException {
+	public void savePosting(long threadVersion, Thread thread, PostingData postingData, int size, MultipartFile file) throws IOException, AmazonServiceException, ParseException {
 		
 		//楽観ロックで排他制御
 		if(threadVersion != thread.getThreadVersion()) {
@@ -157,6 +163,11 @@ public class BulletinboardService {
 		posting.setNumberOfReply(0);
 		posting.setThreadId(threadId);
 		posting.setGenreId(thread.getGenreId());
+		
+		//last_writing_timeを更新
+		UserInfo userInfo = userInfoRepository.findByUsername(posting.getUsername());
+		userInfo.setLastWritingTime(new Date(Utils.createTime()));
+		userInfoRepository.saveAndFlush(userInfo);
 		
 		//画像のアップロードがある場合の処理
 		boolean doUploadingImage = imageService.doUploadingImage(file);
@@ -180,7 +191,7 @@ public class BulletinboardService {
 	
 	//replyをデータベースに登録する
 	@Transactional
-	public void saveReply(long postingVersion, ReplyData replyData, Posting posting, int size) {
+	public void saveReply(long postingVersion, ReplyData replyData, Posting posting, int size) throws ParseException {
 		
 		//楽観ロックで排他制御
 		if(postingVersion != posting.getPostingVersion()) {
@@ -195,6 +206,11 @@ public class BulletinboardService {
 		reply.setThreadId(posting.getThreadId());
 		reply.setGenreId(posting.getGenreId());
 		replyRepository.saveAndFlush(reply);
+		
+		//last_writing_timeを更新
+		UserInfo userInfo = userInfoRepository.findByUsername(reply.getUsername());
+		userInfo.setLastWritingTime(new Date(Utils.createTime()));
+		userInfoRepository.saveAndFlush(userInfo);
 		
 		//postingの情報を更新(replyの登録が成功したとき)
 		posting.setNumberOfReply(size + 1);

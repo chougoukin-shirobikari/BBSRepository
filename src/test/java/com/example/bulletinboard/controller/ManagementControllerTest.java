@@ -128,7 +128,7 @@ class ManagementControllerTest {
 		Integer userId = userInfo.getUserId();
 		//Act and Assert
 		mockMvc
-		.perform(get("/deleteUserInfo/" + userId))
+		.perform(get("/deleteUserInfo/" + userId).param("page", "1"))
 		.andExpect(content().string(not(containsString("deleteduser"))))
 		.andExpect(view().name("fragments/UserInfo :: userInfo"));
 		
